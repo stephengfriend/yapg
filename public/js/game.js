@@ -9,6 +9,9 @@ let cursors;
 let player;
 let platforms;
 
+var score = 0;
+var scoreText;
+
 function preload() {
 		game.load.image('grass', 'assets/Tiles/grassMid.png');
 		game.load.image('grassLeftEnd', 'assets/Tiles/grassCliffRight.png');
@@ -81,6 +84,7 @@ function create() {
 		//  This just gives each star a slightly random bounce value
 		star.body.bounce.y = 0.7 + Math.random() * 0.2;
 	}
+	scoreText = game.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: 'white' });
 }
 
 
@@ -90,7 +94,7 @@ function update() {
 
 	const hitPlatform = game.physics.arcade.collide(player, platforms);
 	const starPlatform = game.physics.arcade.collide(stars, platforms);
-	const hitStars = game.physics.arcade.overlap(player, stars, (player, star) => star.kill(), null, this);
+	const hitStars = game.physics.arcade.overlap(player, stars, (player, star) => {star.kill(); score += 10; scoreText.text = 'Score: ' + score;}, null, this);
 
 	player.body.velocity.x = 0;
 

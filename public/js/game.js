@@ -9,8 +9,8 @@ let cursors;
 let player;
 let platforms;
 
-var score = 0;
-var scoreText;
+let score = 0;
+let scoreText;
 
 function preload() {
 		game.load.image('grass', 'assets/Tiles/grassMid.png');
@@ -94,7 +94,21 @@ function update() {
 
 	const hitPlatform = game.physics.arcade.collide(player, platforms);
 	const starPlatform = game.physics.arcade.collide(stars, platforms);
-	const hitStars = game.physics.arcade.overlap(player, stars, (player, star) => {star.kill(); score += 10; scoreText.text = 'Score: ' + score;}, null, this);
+	const hitStars = game.physics.arcade.overlap(player, stars, collectStar, null, this);
+	scoreText.text = `Score: ${score}`; // Don't need to run this from the callback for it to update
+	
+  function addToScore(amount) {
+	if (Number.isNaN(amount)) {
+		return console.log('amount should be a Number');
+	}
+
+	return score += amount; // Return the value, just in case others would like to use it.
+  }
+
+  function collectStar(player, star) {
+	star.kill();
+	addToScore(10);
+  }
 
 	player.body.velocity.x = 0;
 
